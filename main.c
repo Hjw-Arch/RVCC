@@ -8,9 +8,31 @@ int main(int argc, char** argv) {
         return 1;
     }
 
+    char *P = argv[1];
+
     printf("    .global main\n");
     printf("main:\n");
-    printf("    li a0, %d\n", atoi(argv[1]));
+
+    // 转换字符串
+    printf("    li a0, %ld\n", strtol(P, &P, 10));
+
+    while(*P) {
+        if (*P == '+') {
+            ++P;
+            printf("    addi a0, a0, %ld\n", strtol(P, &P, 10));
+            continue;
+        }
+
+        if (*P == '-') {
+            ++P;
+            printf("    addi a0, a0, -%ld\n", strtol(P, &P, 10));
+            continue;
+        }
+
+        fprintf(stderr, "Unexpected character: '%c'\n", *P);
+        return 1;
+    }
+
     printf("    ret\n");
 
     return 0;
